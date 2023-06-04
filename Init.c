@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <commctrl.h>
+#include <richedit.h>
 #include <stdio.h>
 
 #include "Update_tool.h"
@@ -93,6 +94,33 @@ void InituCCb(HWND hDlg)
 	SendMessage(hComboBox, CB_SETCURSEL, (WPARAM)1, (LPARAM)0);
 }
 
+
+/*+@@fnc@@----------------------------------------------------------------*//*!
+ \brief		WordBreakProc
+ \details	Custom word-breaking procedure
+ \date		Created  on Sun Jun  4 23:29:10 2023
+ \date		Modified on Sun Jun  4 23:29:10 2023
+\*//*-@@fnc@@----------------------------------------------------------------*/
+static int CALLBACK WordBreakProc(LPTSTR lpch, int ichCurrent, int cch, int code)
+{
+    /*
+	 *  Break the line each time margin is reached.
+	 */
+    switch (code)
+    {
+        case WB_ISDELIMITER:
+                return TRUE;
+            break;
+        case WB_LEFT:
+        case WB_RIGHT:
+        case WB_MOVEWORDLEFT:
+        case WB_MOVEWORDRIGHT:
+            return FALSE;
+    }
+    return TRUE;
+}
+
+
 /*+@@fnc@@----------------------------------------------------------------*//*!
  \brief		InitDialog
  \date		Created  on Wed May 31 22:22:16 2023
@@ -113,4 +141,11 @@ void InitDialog(HWND hDlg)
 	SendMessage(hDlg, WM_SETTEXT, 0, (LPARAM)"Update_tool "
 								 UPDATE_TOOL_VERSION " (c)frankie 2023");
 	UpdateSendButton(hDlg, SendStringNormal);
+
+	/*
+	 * Adjust margins and auwrap text at margins.
+	 */
+    DWORD margins = MAKELONG(5, 5);
+    SendMessage(GetDlgItem(hDlg, ID_EDIT), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, margins);
+	SendMessage(GetDlgItem(hDlg, ID_EDIT), EM_SETWORDBREAKPROC, 0, (LPARAM)WordBreakProc);
 }

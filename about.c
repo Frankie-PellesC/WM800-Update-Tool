@@ -15,6 +15,7 @@ static INT_PTR CALLBACK AboutDlgProcedure(HWND hDlg, UINT uMsg, WPARAM wParam, L
 		case WM_INITDIALOG:
 		{
 			SendMessage(hDlg, WM_SETICON, (WPARAM)ICON_BIG, (LPARAM)LoadIcon(ghInstance, MAKEINTRESOURCE(IDR_ICO_MAIN)));
+			SendMessage(GetDlgItem(hDlg, ID_LBL_VERSION), WM_SETTEXT, 0, (LPARAM)"Update Tool V." UPDATE_TOOL_VERSION " (c) frankie 2023");
 			return TRUE;
 		}
 

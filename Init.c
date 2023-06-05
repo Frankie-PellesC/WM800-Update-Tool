@@ -7,6 +7,8 @@
 #include "controls.h"
 #include "Init.h"
 
+HWND hToolTip= NULL;
+
 /*+@@fnc@@----------------------------------------------------------------*//*!
  \brief		InitSpeedCb
  \date		Created  on Wed May 31 22:21:58 2023
@@ -120,6 +122,36 @@ static int CALLBACK WordBreakProc(LPTSTR lpch, int ichCurrent, int cch, int code
     return TRUE;
 }
 
+/*+@@fnc@@----------------------------------------------------------------*//*!
+ \brief		ToolTipAdd
+ \date		Created  on Mon Jun  5 22:14:28 2023
+ \date		Modified on Mon Jun  5 22:14:28 2023
+\*//*-@@fnc@@----------------------------------------------------------------*/
+BOOL ToolTipAdd(HWND hToolTip, HWND hDlg, int toolID, PTSTR pszText)
+{
+	if (!hToolTip | !toolID || !hDlg || !pszText)
+	{
+		return FALSE;
+	}
+
+	// Get the window of the tool.
+	HWND hwndTool = GetDlgItem(hDlg, toolID);
+	if (!hwndTool)
+	{
+		return FALSE;
+	}
+
+	// Associate the tooltip with the tool.
+	TOOLINFO toolInfo = { 0 };
+	toolInfo.cbSize   = sizeof(toolInfo);
+	toolInfo.hwnd     = hDlg;
+	toolInfo.uFlags   = TTF_IDISHWND | TTF_SUBCLASS;
+	toolInfo.uId      = (UINT_PTR)hwndTool;
+	toolInfo.lpszText = pszText;
+	SendMessage(hToolTip, TTM_ADDTOOL, 0, (LPARAM)&toolInfo);
+
+	return TRUE;
+}
 
 /*+@@fnc@@----------------------------------------------------------------*//*!
  \brief		InitDialog
@@ -148,4 +180,26 @@ void InitDialog(HWND hDlg)
     DWORD margins = MAKELONG(5, 5);
     SendMessage(GetDlgItem(hDlg, ID_EDIT), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, margins);
 	SendMessage(GetDlgItem(hDlg, ID_EDIT), EM_SETWORDBREAKPROC, 0, (LPARAM)WordBreakProc);
+
+    // Create the tooltip.
+    hToolTip = CreateWindowEx(0, TOOLTIPS_CLASS, NULL,
+                              WS_POPUP |TTS_ALWAYSTIP | TTS_BALLOON,
+                              CW_USEDEFAULT, CW_USEDEFAULT,
+                              CW_USEDEFAULT, CW_USEDEFAULT,
+                              hDlg, NULL, 
+                              ghInstance, NULL);
+	ToolTipAdd(hToolTip, hDlg, ID_BT_SEND_CMD,     "Send string to the uC. Select for raw or Hex send, or to append CR or LF or Both.");
+	ToolTipAdd(hToolTip, hDlg, ID_BT_CONNECT,      "Connect or disconnect serial line.");
+	ToolTipAdd(hToolTip, hDlg, ID_BT_CLR_SCR,      "Clear terminal contents.");
+	ToolTipAdd(hToolTip, hDlg, ID_BT_SAVE,         "Save terminal contents to the selected file.");
+	ToolTipAdd(hToolTip, hDlg, ID_BT_SELECT_IMAGE, "Open dialog for image file selection.");
+	ToolTipAdd(hToolTip, hDlg, ID_BT_RESET,        "Reset the microcontroller.");
+	ToolTipAdd(hToolTip, hDlg, ID_BT_UPDATE,       "Download image file.");
+	ToolTipAdd(hToolTip, hDlg, ID_CB_SERIAL,       "Select the serial COM port to connect.");
+	ToolTipAdd(hToolTip, hDlg, ID_CB_SPEED,        "Select the serial connection speed.");
+	ToolTipAdd(hToolTip, hDlg, ID_CB_uC,           "Select the microcontroller, W800 or W600 series.");
+	ToolTipAdd(hToolTip, hDlg, ID_CHK_HEX,         "Set terminal to HEX mode.");
+	ToolTipAdd(hToolTip, hDlg, ID_CHK_ERASE,       "Erase FLASH before to download firmware.");
+	ToolTipAdd(hToolTip, hDlg, ID_ED_IMG_FILE,     "File to download.");
+	ToolTipAdd(hToolTip, hDlg, ID_ED_CMD,          "string to send.");
 }

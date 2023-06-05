@@ -10,7 +10,7 @@
 #define RET_SUCCESS				 0
 #define RET_ERROR				-1
 
-#define UPDATE_TOOL_VERSION		"1.00.00"
+#define UPDATE_TOOL_VERSION		"1.00.10"
 
 extern HINSTANCE ghInstance;
 

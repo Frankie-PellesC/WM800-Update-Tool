@@ -121,6 +121,7 @@ FONT 8, "Tahoma", 0, 0, 1
 {
   CONTROL "OK", IDOK, "Button", WS_TABSTOP, 96, 156, 45, 15
   CONTROL ID_IMG_W800, ID_SPLITBT_TEST, "Static", SS_BITMAP|SS_CENTERIMAGE|WS_BORDER, 12, 4, 212, 76
-  CONTROL "This program is a replacement for the original \"Upgrade_Tools_V1.4.18.exe\" which is in chinese language only.\r\nNot all functionalities are programmed in this software, which includes the basic functions required to erase the chip and download the firmware.\r\n\r\nUpdate Tool V.1.00.00 (c) frankie 2023", -1, "Static", SS_CENTER|SS_SUNKEN|WS_GROUP, 4, 88, 232, 60
+  CONTROL "This program is a replacement for the original \"Upgrade_Tools_V1.4.18.exe\" which is in chinese language only.\r\nNot all functionalities are programmed in this software, which includes the basic functions required to erase the chip and download the firmware.", -1, "Static", SS_CENTER|SS_SUNKEN|WS_GROUP, 4, 88, 232, 44
+  CONTROL "", ID_LBL_VERSION, "Static", SS_CENTER|WS_GROUP, 4, 140, 232, 8
 }
 

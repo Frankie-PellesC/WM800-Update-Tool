@@ -317,6 +317,9 @@ void ChangeDownloadSpeed(int speed)
 	CheckMenuItem(hDlSpeedMenu, speed, MF_BYCOMMAND|MF_CHECKED);
 }
 
+#define RGB_BLUE	RGB(  0,   0, 255)
+#define RGB_WHITE	RGB(255, 255, 255)
+
 /*+@@fnc@@----------------------------------------------------------------*//*!
  \brief		MainDlgProc
  \date		Created  on Sun May 21 20:45:49 2023
@@ -335,11 +338,31 @@ static INT_PTR CALLBACK MainDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			return TRUE;
 		}
 
+		case WM_SIZING:
+		{
+		    RECT windowRect;
+		    GetWindowRect(hDlg, &windowRect);
+			*((LPRECT)lParam) = windowRect;
+		    break;
+		}
+
 		case WM_SIZE:
-			/*
-			 * TODO: Add code to process resizing, when needed.
-			 */
+		/*
+		 * No resizing needed.
+		 */
 			return TRUE;
+
+		case WM_CTLCOLORSTATIC:
+		{
+			if (((HWND)lParam) == GetDlgItem(hDlg, ID_EDIT))
+			{
+				HDC hdcStatic = (HDC) wParam;
+				SetTextColor(hdcStatic, RGB_BLUE);
+				SetBkColor(hdcStatic, RGB_WHITE);
+				return (INT_PTR)GetStockObject(WHITE_BRUSH);
+			}
+			break;
+		}
 
 		case WM_COMMAND:
 			switch (GET_WM_COMMAND_ID(wParam, lParam))

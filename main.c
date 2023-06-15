@@ -119,19 +119,19 @@ void SaveScreen(HWND hDlg)
 	if (!GetSaveFileName(&of))
 		return;
 
+	size_t size = SendMessage(GetDlgItem(hDlg, ID_EDIT), WM_GETTEXTLENGTH, 0, 0);
+	if (!size)
+	{
+		MessageBox(hDlg, "No data to save.\nThe file will not be created.", "Info.", MB_OK|MB_ICONINFORMATION);
+		return;
+	}
+
 	FILE *fp = fopen(szFile, "w+");
 	if (!fp)
 	{
 		DWORD error = GetLastError();
 		MessageBoxf(hDlg, "Error.", MB_OK|MB_ICONERROR,
 						"Can't create file \"%s\".\nError %d (0x%02x).", szFile, error, error);
-		return;
-	}
-
-	size_t size = SendMessage(GetDlgItem(hDlg, ID_EDIT), WM_GETTEXTLENGTH, 0, 0);
-	if (!size)
-	{
-		MessageBox(hDlg, "No data to save.\nThe file will not be created.", "Info.", MB_OK|MB_ICONINFORMATION);
 		return;
 	}
 
@@ -147,6 +147,7 @@ void SaveScreen(HWND hDlg)
 	SendMessage(GetDlgItem(hDlg, ID_EDIT), WM_GETTEXT, (WPARAM)size, (LPARAM)p);
 	fwrite(p, size, 1, fp);
 	fclose(fp);
+	free(p);
 }
 
 /*+@@fnc@@----------------------------------------------------------------*//*!

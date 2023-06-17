@@ -43,6 +43,8 @@ void InitComCb(HWND hDlg)
 
 	HWND hComboBox = GetDlgItem(hDlg, ID_CB_SERIAL);
 
+	SendMessage(hComboBox, CB_RESETCONTENT, 0, 0);
+
 	#if defined(KEY_WOW64_64KEY)
 	    BOOL is_64;
 
@@ -160,6 +162,7 @@ BOOL ToolTipAdd(HWND hToolTip, HWND hDlg, int toolID, PTSTR pszText)
 \*//*-@@fnc@@----------------------------------------------------------------*/
 void InitDialog(HWND hDlg)
 {
+	SetWindowLong(hDlg, GWL_STYLE, GetWindowLong(hDlg, GWL_STYLE) & ~WS_MAXIMIZEBOX);
 	InitSpeedCb(hDlg);
 	InitComCb(hDlg);
 	InituCCb(hDlg);

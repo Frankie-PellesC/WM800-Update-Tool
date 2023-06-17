@@ -7,6 +7,7 @@
 #include "controls.h"
 #include "rom.h"
 #include "serial.h"
+#include "Init.h"
 
 static HANDLE hRxThread          = NULL;
 static BOOL   bRunRxThread       = FALSE;
@@ -423,6 +424,7 @@ HANDLE DoConnect(HWND hDlg)
 error:
 	MessageBox(hDlg, szMbMsg, "Error", MB_ICONERROR|MB_OK);
 	EnableControlsList(hDlg, aConnectCtls, NELEMS(aConnectCtls));
+	InitComCb(hDlg);
 	return NULL;
 }
 
@@ -439,6 +441,7 @@ void Disconnect(HWND hDlg, HANDLE *hCom)
 	*hCom = NULL;
 	DisableControlsList(hDlg, aCmdCtls, iCmdCtlsSize);
 	EnableControlsList(hDlg, aConnectCtls, iConnectCtlsSize);
+	InitComCb(hDlg);
 	SetWindowText(GetDlgItem(hDlg, ID_BT_CONNECT), "Connect");
 }
 

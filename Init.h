@@ -8,7 +8,8 @@
 #define DBG_PRT
 #endif
 
-void   InitSpeed(HWND hDlg);
-void   InitDialog(HWND hDlg);
+void InitSpeed(HWND hDlg);
+void InitDialog(HWND hDlg);
+void InitComCb(HWND hDlg);
 
 #endif	// INIT_H__
